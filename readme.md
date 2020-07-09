@@ -1,9 +1,5 @@
 # Sketch Synth Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/SqY2iRIYjlY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2jNWzR8PiiM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ![Main](media/main_screen.jpg)         
 
 ![Change view](media/swap_mainView.jpg)         
@@ -13,6 +9,9 @@
 ![Pixel view](media/pixelView.jpg)         
 
 ![Dropdown menu for audio output](media/audioDevices.jpg)        
+
+[Testing SketchSynth Video Version #1. Youtube](https://www.youtube.com/embed/SqY2iRIYjlY)        
+[Testing SketchSynth Video Version #2. Youtube](https://www.youtube.com/embed/2jNWzR8PiiM)		
 
 <hr>		
 
