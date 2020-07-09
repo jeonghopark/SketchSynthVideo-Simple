@@ -15,14 +15,14 @@
 
 <hr>		
 
-## Short description						
+## Description						
 A video version of SketchSynth. (<a target="_blank" href="https://github.com/jeonghopark/SketchSynth-Simple">SketchSynth Github</a>) It behaves like Sketchsynth and can import video files. Video format should be mp4 or mov. Changing the effect of the video creates other sound patterns.        
 
-- Import a video (mov or mp4, Shortcut key is 'o')      
-- Press "space bar" to generate sound play or pause.      
+- Import a video (mov or mp4, A shortcut key is 'o')      
+- Press "space bar" to generate a sound play or pause.      
 - Change the contrast and brightness parameters for better detections      
 - Optional effects are Edgeview, Contourview and Pixelview        
-- Dropdown menu for audio out devices           
+- Choosable for audio out devices           
 
 ## Support				
 If you like this experiment development, please support me.
