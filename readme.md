@@ -1,5 +1,9 @@
 # Sketch Synth Video
 
+<b>v0.0.1 Download (Mac OS Catalina - 10.15.5)</b> : [SketchSynthFilm-Simple](https://github.com/jeonghopark/SketchSynthFilm-Simple/releases/tag/v0.0.1)						
+
+
+
 ![Main](media/main_screen.jpg)         
 
 ![Change view](media/swap_mainView.jpg)         
