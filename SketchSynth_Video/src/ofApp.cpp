@@ -210,6 +210,12 @@ void ofApp::mouseReleasedEvent(ofMouseEventArgs & mouse) {
 //--------------------------------------------------------------
 void ofApp::update() {
 
+    if (bPlaying) {
+        ofSoundStreamStart();
+    } else {
+        ofSoundStreamStop();
+    }
+
     moviePlay.setVolume(movieVolumeSlider);
     moviePixel.clear();
     moviePlay.update();
@@ -229,7 +235,6 @@ void ofApp::update() {
         moviePixel = calBrightness();
     }
     
-    
     if (moviePlay.isFrameNew() && bPlaying && moviePlay.getPixels().size() > 0) {
         
         for (int i = 0; i < BIT; i++) {
@@ -243,14 +248,35 @@ void ofApp::update() {
         for (int n = 0; n < BIT; n++) {
             int _yRatioLeft = floor(ofMap(n, 0, BIT - 1, 0, _height - 1));
             int _yRatioRight = floor(ofMap(n, 0, BIT - 1, 0, _height - 1));
-            ampLeft[n] = (ampLeft[n] * overlap + getAmpLeft(_width * 0.25, _yRatioLeft)) / (overlap + 1);
-            hertzScaleLeft[n] = int(getFreqLeft(n));
-            ampRight[n] = (ampRight[n] * overlap + getAmpRight(_width * 0.75, _yRatioRight)) / (overlap + 1);
-            hertzScaleRight[n] = int(getFreqRight(n));
+            ampLeft[n] = (ampLeft[n] * overlap + getAmp(_width * 0.25, _yRatioLeft)) / (overlap + 1);
+            hertzScaleLeft[n] = int(getFreq(n));
+            ampRight[n] = (ampRight[n] * overlap + getAmp(_width * 0.75, _yRatioRight)) / (overlap + 1);
+            hertzScaleRight[n] = int(getFreq(n));
         }
 
     }
     
+}
+
+
+//--------------------------------------------------------------
+float ofApp::getAmp(float _x, float _y) {
+
+    return moviePixel.getColor(_x, _y).getLightness() / 255.0;
+
+}
+
+
+//--------------------------------------------------------------
+float ofApp::getFreq(float _yPos) {
+    
+    float _freq = 0;
+    float _yPosToFreq = ofMap(_yPos, 0, BIT, lofq, hifq);
+    _freq = 1 - (log(_yPosToFreq) - log(lofq)) / (log(hifq) - log(lofq));
+    _freq *= hifq;
+
+    return _freq;
+
 }
 
 
@@ -309,67 +335,6 @@ void ofApp::calRectPixelFBO() {
     processRectPixelFBO.end();
     
     processRectPixelFBO.readToPixels(moviePixel);
-
-}
-
-
-//--------------------------------------------------------------
-float ofApp::getAmpLeft(float x, float y) {
-
-    return moviePixel.getColor(x, y).getLightness() / 255.0;
-
-}
-
-
-//--------------------------------------------------------------
-float ofApp::getAmpRight(float x, float y) {
-
-    return moviePixel.getColor(x, y).getLightness() / 255.0;
-
-}
-
-
-
-//--------------------------------------------------------------
-float ofApp::getFreqLeft(float y) {
-    
-    float freq = 0;
-
-    float _maxHz = hifq;
-    float _minHz = lofq;
-    float yToFreq = (y / BIT) * _maxHz;
-
-    //TODO logarithmic scale
-    freq = 1 - (log(yToFreq) - log(_minHz)) / (log(_maxHz) - log(_minHz));
-    freq *= _maxHz;
-    //    freq = 1-(yToFreq-_minHz) / (_maxHz-_minHz);
-    //    freq = (BIT-y+_minHz)/BIT*(_maxHz-_minHz);
-
-    return freq;
-
-}
-
-
-//--------------------------------------------------------------
-float ofApp::getFreqRight(float y) {
-
-    float freq = 0;
-
-    //    if(height>0){
-    //    y-=9;
-
-    float _maxHz = hifq;
-    float _minHz = lofq;
-    float yToFreq = (y / BIT) * _maxHz;
-
-    //TODO logarithmic scale
-    freq = 1 - (log(yToFreq) - log(_minHz)) / (log(_maxHz) - log(_minHz));
-    freq *= _maxHz;
-    //freq = 1-(yToFreq-minHz) / (maxHz-minHz);
-    //freq= (spectrumHeight-y+minHz)/spectrumHeight*(maxHz-minHz);
-    //    }
-
-    return freq;
 
 }
 
@@ -572,52 +537,45 @@ void ofApp::exit() {
 void ofApp::audioOut(ofSoundBuffer & buffer) {
 
     if (bPlaying) {
-
         for (int i = 0; i < buffer.getNumFrames(); i += 2) {
-
-            waveRight = 0.0;
-            waveLeft = 0.0;
-
+            float waveRight = 0.0;
+            float remainderRight = 0.0;
+            float waveLeft = 0.0;
+            float remainderLeft = 0.0;
+            
             for (int n = 0; n < BIT; n++) {
-
-                if (ampLeft[n] > 0.00001) {
-                    phasesLeft[n] += 512. / (44100.0 / (hertzScaleLeft[n]));
-
-                    if (phasesLeft[n] >= 511) phasesLeft[n] -= 512;
-                    if (phasesLeft[n] < 0) phasesLeft[n] = 0;
-
-                    //remainder = phases[n] - floor(phases[n]);
-                    //wave+=(float) ((1-remainder) * sineBuffer[1+ (long) phases[n]] + remainder * sineBuffer[2+(long) phases[n]])*amp[n];
-
-                    waveLeft += (sineBufferLeft[1 + (long)phasesLeft[n]]) * ampLeft[n];
+                phasesLeft[n] += 512.0 / 44100.0 * hertzScaleLeft[n];
+                if (phasesLeft[n] >= 511) {
+                    phasesLeft[n] -= 512;
                 }
-
-                if (ampRight[n] > 0.00001) {
-                    phasesRight[n] += 512. / (44100.0 / (hertzScaleRight[n]));
-
-                    if (phasesRight[n] >= 511) phasesRight[n] -= 512;
-                    if (phasesRight[n] < 0) phasesRight[n] = 0;
-
-                    //remainder = phases[n] - floor(phases[n]);
-                    //wave+=(float) ((1-remainder) * sineBuffer[1+ (long) phases[n]] + remainder * sineBuffer[2+(long) phases[n]])*amp[n];
-
-                    waveRight += (sineBufferRight[1 + (long)phasesRight[n]]) * ampRight[n];
+                if (phasesLeft[n] < 0) {
+                    phasesLeft[n] = 0;
                 }
+                
+                remainderLeft = phasesLeft[n] - floor(phasesLeft[n]);
+                waveLeft += (float)((1-remainderLeft) * sineBufferLeft[1 + (long)phasesLeft[n]] + remainderLeft * sineBufferLeft[2 + (long)phasesLeft[n]]) * ampLeft[n];
 
+                phasesRight[n] += 512.0 / 44100.0 * hertzScaleRight[n];
+                if (phasesRight[n] >= 511) {
+                    phasesRight[n] -= 512;
+                }
+                if (phasesRight[n] < 0) {
+                    phasesRight[n] = 0;
+                }
+                
+                remainderRight = phasesRight[n] - floor(phasesRight[n]);
+                waveRight += (float)((1 - remainderRight) * sineBufferRight[1 + (long)phasesRight[n]] + remainderRight * sineBufferRight[2 + (long)phasesRight[n]]) * ampRight[n];
             }
 
-            waveRight /= 10.0;
-            waveLeft /= 10.0;
-            if (waveRight > 1.0) waveRight = 1.0;
-            if (waveRight < -1.0) waveRight = -1.0;
-            if (waveLeft > 1.0) waveLeft = 1.0;
-            if (waveLeft < -1.0) waveLeft = -1.0;
+            waveRight /= 20.0;
+            waveLeft /= 20.0;
+            waveRight = MAX(MIN(waveRight, 1.0), -1.0);
+            waveLeft = MAX(MIN(waveLeft, 1.0), -1.0);
 
             float _volume = volumeSlider;
             buffer[i * buffer.getNumChannels()] = waveLeft * _volume;
             buffer[i * buffer.getNumChannels() + 1] = waveRight * _volume;
         }
-
     } else {
         for (int i = 0; i < buffer.getNumFrames(); i += 2) {
             buffer[i * buffer.getNumChannels()] = 0;
@@ -631,8 +589,8 @@ void ofApp::audioOut(ofSoundBuffer & buffer) {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 
-
 }
+
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
@@ -640,19 +598,13 @@ void ofApp::keyReleased(int key) {
     if (key == ' ') {
         bPlaying = !bPlaying;
     }
-
-    if (bPlaying) {
-        ofSoundStreamStart();
-    } else {
-        ofSoundStreamStop();
-    }
-    
     
     if (key == 'o' || key == 'O') {
         openFileButtonPressed();
     }
 
 }
+
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y) {

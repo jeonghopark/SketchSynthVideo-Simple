@@ -1,7 +1,3 @@
-// http://www.beachfrontbroll.com/2014/02/SnowSpecialEffect.html
-//https://github.com/dfeles/refreq
-
-
 #pragma once
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -12,7 +8,6 @@
 #define SAMPLE_RATE 44100
 #define INITIAL_BUFFER_SIZE 512
 #define BIT 512
-
 
 
 class ofApp : public ofBaseApp{
@@ -49,8 +44,6 @@ public:
     
     float remainderLeft;
     float remainderRight;
-    float waveLeft;
-    float waveRight;
     float ampLeft[BIT];
     float ampRight[BIT];
     int hertzScaleLeft[BIT];
@@ -116,13 +109,9 @@ public:
     
     
     // audio
-    float getPixelLeft(int x, int y);
-    float getAmpLeft(float x, float y);
-    float getFreqLeft(float y);
-    float getPixelRight(int x, int y);
-    float getAmpRight(float x, float y);
-    float getFreqRight(float y);
-    
+    float getFreq(float _yPos);
+    float getAmp(float _x, float _y);
+        
     bool bPlaying;
     void setAudio(ofSoundStreamSettings settings);
     ofSoundStreamSettings setAudioDevice();
