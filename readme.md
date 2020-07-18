@@ -42,20 +42,21 @@ If you like this experiment development, please support me.
 <link href="https://fonts.googleapis.com/css?family=Arial" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/c4KbpP0oa"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:16px !important;">Buy me a coffee</span></a>
 
 ## Links
-<b>v0.0.1 Download (Mac OS Catalina - 10.15.5)</b> : [SketchSynthFilm-Simple](https://github.com/jeonghopark/SketchSynthFilm-Simple/releases/tag/v0.0.1)				
+<b>v0.0.2 Download (Mac OS Catalina - 10.15.5 / Windows 10)</b> : [SketchSynthFilm-Simple](https://github.com/jeonghopark/SketchSynthVideo-Simple/releases/tag/v0.0.2)					
+			
+<hr>				
+## Source code     					
 
-<b>v0.0.1 Download (Windows 10)</b> : Comming soon.				
-
-<b>Sourcecode</b> : not yet.         
 !!! I'm an artist working with code. Not a real programmer. Maybe the source code is unusual. But it works. :-).            
 
 It's made with openFrameworks C++ framework. - <a target="_blank" href="https://openframeworks.cc">https://openframeworks.cc</a>
 
 ## Upcoming features
 - User interface	
-- More viedeo effects		
-- Changable trigger lines
+- More video effects		
 - Video speed
+
+<hr>					
 
 ## Contact		
 Mail: jeonghopark (at) jeonghopark.de             
