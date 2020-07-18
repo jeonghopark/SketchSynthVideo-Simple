@@ -1,8 +1,17 @@
 # Sketch Synth Video
 
-<b>v0.0.1 Download (Mac OS Catalina - 10.15.5)</b> : [SketchSynthFilm-Simple](https://github.com/jeonghopark/SketchSynthFilm-Simple/releases/tag/v0.0.1)						
+<b>v0.0.2 Download (Mac OS Catalina - 10.15.5 / Windows 10)</b> : [SketchSynth Video Simple](https://github.com/jeonghopark/SketchSynthVideo-Simple/releases)						
+<hr>
 
+## Update !!!
+Drawable trigger line
+Editable trigger line
 
+1. Make a trigger line by mouse click
+2. Edit the edit points of the trigger line
+3. Use "Delete - key" keyboard is for removing the last point.
+
+<hr>
 
 ![Main](media/main_screen.jpg)         
 
